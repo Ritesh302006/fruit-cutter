@@ -1,0 +1,64 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --sat: env(safe-area-inset-top, 0px);
+    --sab: env(safe-area-inset-bottom, 0px);
+    --sal: env(safe-area-inset-left, 0px);
+    --sar: env(safe-area-inset-right, 0px);
+  }
+
+  html, body {
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-touch-callout: none;
+    touch-action: none;
+    font-family: 'Outfit', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background-color: #090d16;
+  }
+}
+
+.font-game {
+  font-family: 'Fredoka', 'Outfit', cursive, system-ui, sans-serif;
+}
+
+/* Safe area padding utilities */
+.pt-safe {
+  padding-top: max(16px, env(safe-area-inset-top, 16px));
+}
+
+.pb-safe {
+  padding-bottom: max(16px, env(safe-area-inset-bottom, 16px));
+}
+
+.pl-safe {
+  padding-left: max(16px, env(safe-area-inset-left, 16px));
+}
+
+.pr-safe {
+  padding-right: max(16px, env(safe-area-inset-right, 16px));
+}
+
+/* Pulsing and glowing keyframe animations */
+@keyframes float-subtle {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  50% { transform: translateY(-6px) rotate(1deg); }
+}
+
+.animate-float-subtle {
+  animation: float-subtle 3s ease-in-out infinite;
+}
+
+@keyframes pulse-glow {
+  0%, 100% { opacity: 0.8; filter: drop-shadow(0 0 12px rgba(244, 63, 94, 0.6)); }
+  50% { opacity: 1; filter: drop-shadow(0 0 24px rgba(244, 63, 94, 0.9)); }
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 2s ease-in-out infinite;
+}

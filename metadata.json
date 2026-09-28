@@ -1,0 +1,6 @@
+{
+  "name": "Food Slice",
+  "description": "Slice it. Combo it. Master it. High-octane portrait mobile arcade food slicing game with juicy physics, combos, bombs, and game modes.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
