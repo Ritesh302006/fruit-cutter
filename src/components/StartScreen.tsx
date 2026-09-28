@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { BladeStyle, GameMode } from '../game/types';
 import { Award, BookOpen, Clock, Flame, Heart, Infinity as InfinityIcon, Play, ShieldAlert, Sparkles, Trophy, Volume2, VolumeX } from 'lucide-react';
 import { PWAInstallButton } from '../pwa/PWAInstallButton';
+import { AdBanner } from './AdBanner';
 import { sounds } from '../game/sound';
 
 interface StartScreenProps {
@@ -200,6 +201,9 @@ export const StartScreen: React.FC<StartScreenProps> = ({
             <span>HOW TO PLAY</span>
           </button>
         </div>
+
+        {/* Google AdSense Banner */}
+        <AdBanner className="mt-1" />
       </div>
     </div>
   );

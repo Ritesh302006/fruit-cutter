@@ -8,6 +8,7 @@ interface GameCanvasProps {
   mode: GameMode;
   bladeStyle: BladeStyle;
   isPaused: boolean;
+  reviveSignal?: number;
   onStatsUpdate: (stats: Partial<GameStats>) => void;
   onGameOver: (finalStats: GameStats) => void;
   onComboAnnounce: (combo: number, points: number) => void;
@@ -17,6 +18,7 @@ export const GameCanvas: React.FC<GameCanvasProps> = ({
   mode,
   bladeStyle,
   isPaused,
+  reviveSignal,
   onStatsUpdate,
   onGameOver,
   onComboAnnounce,
@@ -101,6 +103,35 @@ export const GameCanvas: React.FC<GameCanvasProps> = ({
       timeLeft: stateRef.current.timeLeft,
     });
   }, [mode, onStatsUpdate]);
+
+  // Handle Rewarded Ad Revival
+  useEffect(() => {
+    if (reviveSignal && reviveSignal > 0) {
+      const state = stateRef.current;
+      state.isGameOver = false;
+      state.lives = 1;
+      state.foods = []; // clear current screen threats
+      state.missMarkers = [];
+      state.lastSpawnTime = -0.5; // slight grace period before new wave launches
+      state.flashAlpha = 0.6;
+      state.floatingTexts.push({
+        id: `revive-${Date.now()}`,
+        x: state.width / 2,
+        y: state.height * 0.45,
+        text: 'REVIVED! +1 ❤️',
+        color: '#10b981',
+        fontSize: 30,
+        scale: 1.4,
+        alpha: 1,
+        vy: -75,
+        life: 0,
+      });
+      onStatsUpdate({
+        lives: 1,
+        isGameOver: false,
+      });
+    }
+  }, [reviveSignal, onStatsUpdate]);
 
   // Handle Resize and Canvas DPI setup
   const updateCanvasSize = useCallback(() => {

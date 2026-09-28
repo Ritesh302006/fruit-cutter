@@ -1,6 +1,7 @@
 import React from 'react';
 import { Home, Play, RotateCcw, Volume2, VolumeX } from 'lucide-react';
 import { sounds } from '../game/sound';
+import { AdBanner } from './AdBanner';
 
 interface PauseModalProps {
   score: number;
@@ -84,6 +85,9 @@ export const PauseModal: React.FC<PauseModalProps> = ({
             <span>MAIN MENU</span>
           </button>
         </div>
+
+        {/* AdSense Ad Unit */}
+        <AdBanner className="mt-4" />
       </div>
     </div>
   );

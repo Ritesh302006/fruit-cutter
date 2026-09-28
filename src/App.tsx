@@ -7,6 +7,7 @@ import { PauseModal } from './components/PauseModal';
 import { GameOverModal } from './components/GameOverModal';
 import { HowToPlayModal } from './components/HowToPlayModal';
 import { BladeModal } from './components/BladeModal';
+import { RewardedAdModal } from './components/RewardedAdModal';
 import { OfflineIndicator } from './pwa/OfflineIndicator';
 import { sounds } from './game/sound';
 import { Maximize2, Minimize2, Smartphone } from 'lucide-react';
@@ -20,6 +21,11 @@ export default function App() {
   const [isHowToPlayOpen, setIsHowToPlayOpen] = useState(false);
   const [isMuted, setIsMuted] = useState(sounds.getMuted());
   const [isDesktopFrame, setIsDesktopFrame] = useState(true);
+
+  // Rewarded Ad revival state
+  const [isRewardedAdOpen, setIsRewardedAdOpen] = useState(false);
+  const [hasRevivedThisRun, setHasRevivedThisRun] = useState(false);
+  const [reviveSignal, setReviveSignal] = useState(0);
 
   // Active game session statistics
   const [stats, setStats] = useState<GameStats>({
@@ -80,6 +86,8 @@ export default function App() {
   const handleStartGame = () => {
     setGameSessionKey((k) => k + 1);
     setIsPaused(false);
+    setIsRewardedAdOpen(false);
+    setHasRevivedThisRun(false);
     setGameState('playing');
     setStats((prev) => ({
       ...prev,
@@ -100,6 +108,8 @@ export default function App() {
 
   const handleHome = () => {
     setIsPaused(false);
+    setIsRewardedAdOpen(false);
+    setHasRevivedThisRun(false);
     setGameState('start');
     const savedBest = localStorage.getItem(`food_slice_best_${mode}`);
     const best = savedBest ? parseInt(savedBest, 10) : 0;
@@ -153,6 +163,7 @@ export default function App() {
             mode={mode}
             bladeStyle={bladeStyle}
             isPaused={isPaused || gameState !== 'playing'}
+            reviveSignal={reviveSignal}
             onStatsUpdate={handleStatsUpdate}
             onGameOver={handleGameOver}
             onComboAnnounce={handleComboAnnounce}
@@ -205,11 +216,26 @@ export default function App() {
           )}
 
           {/* Game Over Modal */}
-          {gameState === 'gameover' && (
+          {gameState === 'gameover' && !isRewardedAdOpen && (
             <GameOverModal
               stats={stats}
+              canRevive={!hasRevivedThisRun && mode !== 'timeAttack'}
+              onWatchAdToRevive={() => setIsRewardedAdOpen(true)}
               onPlayAgain={handleRestart}
               onHome={handleHome}
+            />
+          )}
+
+          {/* Rewarded Sponsor Ad Modal */}
+          {isRewardedAdOpen && (
+            <RewardedAdModal
+              onRewardEarned={() => {
+                setIsRewardedAdOpen(false);
+                setHasRevivedThisRun(true);
+                setGameState('playing');
+                setReviveSignal((prev) => prev + 1);
+              }}
+              onClose={() => setIsRewardedAdOpen(false)}
             />
           )}
 

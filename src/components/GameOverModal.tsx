@@ -1,16 +1,21 @@
 import React, { useState } from 'react';
 import { GameStats } from '../game/types';
-import { Award, Check, Home, RotateCcw, Share2, Sparkles, Trophy } from 'lucide-react';
+import { Award, Check, Film, Heart, Home, RotateCcw, Share2, Sparkles, Trophy } from 'lucide-react';
 import { sounds } from '../game/sound';
+import { AdBanner } from './AdBanner';
 
 interface GameOverModalProps {
   stats: GameStats;
+  canRevive?: boolean;
+  onWatchAdToRevive?: () => void;
   onPlayAgain: () => void;
   onHome: () => void;
 }
 
 export const GameOverModal: React.FC<GameOverModalProps> = ({
   stats,
+  canRevive = false,
+  onWatchAdToRevive,
   onPlayAgain,
   onHome,
 }) => {
@@ -97,7 +102,21 @@ export const GameOverModal: React.FC<GameOverModalProps> = ({
         </div>
 
         {/* Buttons */}
-        <div className="space-y-2.5">
+        <div className="space-y-2">
+          {/* Watch Ad to Revive Button */}
+          {canRevive && onWatchAdToRevive && stats.mode !== 'timeAttack' && (
+            <button
+              onClick={() => {
+                sounds.playClick();
+                onWatchAdToRevive();
+              }}
+              className="w-full py-3.5 rounded-2xl bg-gradient-to-r from-amber-500 via-rose-500 to-amber-600 font-game font-extrabold text-white text-sm shadow-lg shadow-orange-500/40 flex items-center justify-center gap-2 active:scale-95 transition animate-pulse"
+            >
+              <Film className="w-4 h-4" />
+              <span>WATCH AD TO REVIVE (+1 ❤️)</span>
+            </button>
+          )}
+
           <button
             onClick={() => {
               sounds.playClick();
@@ -138,6 +157,9 @@ export const GameOverModal: React.FC<GameOverModalProps> = ({
               )}
             </button>
           </div>
+
+          {/* AdSense Ad Unit */}
+          <AdBanner className="mt-2" />
         </div>
       </div>
     </div>
